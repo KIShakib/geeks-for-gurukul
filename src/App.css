@@ -37,3 +37,8 @@
     transform: translateY(0px);
   }
 }
+
+
+.navbar-shadow{
+  box-shadow: 0 0 50px rgba(163, 206, 241, 0.8);
+}
