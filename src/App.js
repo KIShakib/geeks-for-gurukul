@@ -5,7 +5,7 @@ import Form from './Components/Pages/Form/Form';
 
 function App() {
   return (
-    <div className='bg-bgColor font-barlow h-full'>
+    <div className='bg-bgColor font-barlow h-screen'>
       <Navbar />
       <Form />
     </div>

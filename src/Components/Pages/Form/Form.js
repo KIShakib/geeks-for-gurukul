@@ -5,41 +5,52 @@ import school from "../../../Assets/school.png";
 import college from "../../../Assets/college.png";
 import lookingJob from "../../../Assets/looking-job.png";
 import working from "../../../Assets/working.png";
-import { useDispatch, useSelector } from 'react-redux';
-import { getFormData } from '../../../features/form/formSlice';
+import { getFormData } from "../../../features/form/formSlice";
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import Modal from '../Modal/Modal';
 
 const Form = () => {
     const [isStudying, setIsStudying] = useState(null);
     const [schoolOrCollege, setSchoolOrCollege] = useState(null);
     const [isWorking, setIsWorking] = useState(null);
-    const state = useSelector((state) => state.form);
+    const [modalOpen, setModalOpen] = useState(false);
+
     const dispatch = useDispatch();
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
-    console.log(isStudying, schoolOrCollege, isWorking);
+    // console.log(state);
 
+    const { register, handleSubmit } = useForm();
 
-    const onSubmit = data => console.log(data);
+    const onSubmit = data => {
+        // console.log("From onSubmit");
+        dispatch(getFormData(data));
+        setModalOpen(!modalOpen)
+    };
 
     return (
-        <div className='mt-10 h-screen'>
+        <div className='py-20'>
             <h3 className='text-center text-2xl font-barlow font-medium text-primary'>Hi Stranger! Welcome back to Geeks for Gurukul</h3>
+
+
             <form className='mt-5' onSubmit={handleSubmit(onSubmit)}>
 
                 {/* Studying Status Start */}
                 <div>
                     <h3 className='text-center text-xl'>Are you currently studying?</h3>
-                    <div className='lg:flex lg:flex-row flex flex-col gap-x-10 gap-y-5 justify-center mt-2'>
+                    <div className='flex flex-row gap-x-10 gap-y-5 justify-center mt-2'>
 
                         <label className="relative cursor-pointer">
                             <input
-                                onClick={() => setIsStudying(true)}
+                                {...register("isStudying", { required: true })}
+                                onClick={() => { setIsStudying(true); setIsWorking(null) }}
                                 type="radio"
-                                value="arcadePlan"
-                                className="peer sr-only" name="isStudying" />
-                            <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${isStudying === true ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                <div className="p-2 lg:h-24 lg:w-20 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                value={true}
+                                className="peer sr-only"
+                                name="isStudying"
+                            />
+                            <div className={`flex cursor-pointer rounded overflow-hidden ring ring-transparent transition-all active:scale-95 ${isStudying === true ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                <div className="p-2 h-24 w-20 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                     <img src={studying} alt="" />
                                     <h5 className="font-semibold text-[#1d5da8] text-xs mt-1">Yes. I'm studying</h5>
                                 </div>
@@ -48,11 +59,15 @@ const Form = () => {
 
                         <label className="relative cursor-pointer">
                             <input
-                                onClick={() => setIsStudying(false)}
+                                {...register("isStudying", { required: true })}
+                                onClick={() => { setIsStudying(false); setSchoolOrCollege(null) }}
                                 type="radio"
-                                value="advancedPlan" className="peer sr-only" name="isStudying" />
-                            <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${isStudying === false ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                <div className="p-2 lg:h-24 lg:w-20 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                value={false}
+                                className="peer sr-only"
+                                name="isStudying"
+                            />
+                            <div className={`flex cursor-pointer rounded overflow-hidden ring ring-transparent transition-all active:scale-95 ${isStudying === false ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                <div className="p-2 h-24 w-20 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                     <img src={notStudying} alt="" />
                                     <div className="">
                                         <h2 className="font-semibold text-[#1d5da8] text-xs mt-1">No. I'm not studying</h2>
@@ -75,16 +90,19 @@ const Form = () => {
                     &&
                     <div className='mt-5'>
                         <h3 className='text-center text-xl'>Are you currently?</h3>
-                        <div className='lg:flex lg:flex-row flex flex-col gap-x-10 gap-y-5 justify-center mt-2'>
+                        <div className='flex flex-row gap-x-10 gap-y-5 justify-center mt-2'>
 
                             <label className="relative cursor-pointer">
                                 <input
+                                    {...register("schoolOrCollege", { required: true })}
                                     onClick={() => setSchoolOrCollege("school")}
                                     type="radio"
-                                    value="arcadePlan"
-                                    className="sr-only" name="schoolOrCollege" />
-                                <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${schoolOrCollege === "school" ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                    <div className="p-2 lg:h-24 lg:w-20 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                    value="school"
+                                    className="sr-only"
+                                    name="schoolOrCollege"
+                                />
+                                <div className={`flex cursor-pointer rounded overflow-hidden ring ring-transparent transition-all active:scale-95 ${schoolOrCollege === "school" ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                    <div className="p-2 h-24 w-20 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                         <img src={school} alt="" />
                                         <h5 className="font-semibold text-[#1d5da8] text-xs mt-1">In school</h5>
                                     </div>
@@ -93,11 +111,15 @@ const Form = () => {
 
                             <label className="relative cursor-pointer">
                                 <input
+                                    {...register("schoolOrCollege", { required: true })}
                                     onClick={() => setSchoolOrCollege("college")}
                                     type="radio"
-                                    value="advancedPlan" className="peer sr-only" name="schoolOrCollege" />
-                                <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${schoolOrCollege === "college" ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                    <div className="p-2 lg:h-24 lg:w-20 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                    value="college"
+                                    className="peer sr-only"
+                                    name="schoolOrCollege"
+                                />
+                                <div className={`flex cursor-pointer rounded overflow-hidden  ring ring-transparent transition-all active:scale-95 ${schoolOrCollege === "college" ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                    <div className="p-2 h-24 w-20 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                         <img src={college} alt="" />
                                         <div className="">
                                             <h2 className="font-semibold text-[#1d5da8] text-xs mt-1">In college</h2>
@@ -120,9 +142,11 @@ const Form = () => {
                             htmlFor="schoolName">
                             <h5 className='text-lg'>School Name</h5>
                             <input
+                                {...register("schoolName", { required: true })}
                                 type="text"
                                 id='schoolName'
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
+                                name='schoolName'
                                 required
                             />
                         </label>
@@ -131,19 +155,20 @@ const Form = () => {
                             htmlFor="schoolGrade">
                             <h5 className='text-lg'>Select your grade</h5>
                             <select
+                                {...register("schoolGrade", { required: true })}
                                 name="schoolGrade"
                                 id="schoolGrade"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
-                                required
+                                required={true}
                             >
-                                <option selected value="grade">Grade?</option>
-                                <option value="six">Six</option>
-                                <option value="seven">Seven</option>
-                                <option value="eight">Eight</option>
-                                <option value="nine">Nine</option>
-                                <option value="ten">Ten</option>
-                                <option value="eleven">Eleven</option>
-                                <option value="twelve">Twelve</option>
+                                <option hidden>Grade?</option>
+                                <option value="Six">Six</option>
+                                <option value="Seven">Seven</option>
+                                <option value="Eight">Eight</option>
+                                <option value="Nine">Nine</option>
+                                <option value="Ten">Ten</option>
+                                <option value="Eleven">Eleven</option>
+                                <option value="Twelve">Twelve</option>
                             </select>
                         </label>
                     </div>
@@ -159,9 +184,11 @@ const Form = () => {
                             htmlFor="collegeName">
                             <h5 className='text-lg'>College Name</h5>
                             <input
+                                {...register("collegeName", { required: true })}
                                 type="text"
                                 id='collegeName'
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
+                                name='collegeName'
                                 required
                             />
                         </label>
@@ -170,17 +197,18 @@ const Form = () => {
                             htmlFor="collegeDegree">
                             <h5 className='text-lg'>Select your latest degree</h5>
                             <select
+                                {...register("collegeDegree", { required: true })}
                                 name="collegeDegree"
                                 id="collegeDegree"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option selected value="grade">Latest degree?</option>
-                                <option value="bTech">BTech</option>
-                                <option value="bsc">BSC</option>
-                                <option value="msc">MSC</option>
-                                <option value="bba">BBA</option>
-                                <option value="mba">MBA</option>
+                                <option hidden>Latest degree?</option>
+                                <option value="BTech">BTech</option>
+                                <option value="BSC">BSC</option>
+                                <option value="MSC">MSC</option>
+                                <option value="BBA">BBA</option>
+                                <option value="MBA">MBA</option>
                             </select>
                         </label>
                         <label
@@ -188,12 +216,13 @@ const Form = () => {
                             htmlFor="graduationYear">
                             <h5 className='text-lg'>Select your graduation year</h5>
                             <select
+                                {...register("graduationYear", { required: true })}
                                 name="graduationYear"
                                 id="graduationYear"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option value="grade">Graduation year?</option>
+                                <option hidden>Graduation year?</option>
                                 <option value="2023">2023</option>
                                 <option value="2022">2022</option>
                                 <option value="2021">2021</option>
@@ -226,16 +255,19 @@ const Form = () => {
                     isStudying === false &&
                     <div className='mt-5'>
                         <h3 className='text-center text-xl'>Are you currently?</h3>
-                        <div className='lg:flex lg:flex-row flex flex-col gap-x-10 gap-y-5 justify-center mt-2'>
+                        <div className='flex flex-row gap-x-10 gap-y-5 justify-center mt-2'>
 
                             <label className="relative cursor-pointer">
                                 <input
+                                    {...register("jobOrWorking", { required: true })}
                                     onClick={() => setIsWorking("Looking for a job")}
                                     type="radio"
                                     value="Looking for a job"
-                                    className="peer sr-only" name="jobOrWorking" />
-                                <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${isWorking === "Looking for a job" ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                    <div className="p-2 lg:h-28 lg:w-24 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                    className="peer sr-only"
+                                    name="jobOrWorking"
+                                />
+                                <div className={`flex cursor-pointer rounded overflow-hidden  ring ring-transparent transition-all active:scale-95 ${isWorking === "Looking for a job" ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                    <div className="p-2 h-28 w-24 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                         <img src={lookingJob} alt="" />
                                         <h5 className="font-semibold text-[#1d5da8] text-xs mt-1">Looking for a job</h5>
                                     </div>
@@ -244,11 +276,15 @@ const Form = () => {
 
                             <label className="relative cursor-pointer">
                                 <input
+                                    {...register("jobOrWorking", { required: true })}
                                     onClick={() => setIsWorking("Currently working")}
                                     type="radio"
-                                    value="Currently working" className="peer sr-only" name="jobOrWorking" />
-                                <div className={`flex cursor-pointer rounded overflow-hidden ring-secondary  ring ring-transparent transition-all active:scale-95 ${isWorking === "Currently working" ? "bg-secondary ring-primary" : "bg-white"}`}>
-                                    <div className="p-2 lg:h-28 lg:w-24 text-center flex lg:flex-col lg:justify-between items-center lg:gap-0 gap-x-5">
+                                    value="Currently working"
+                                    className="peer sr-only"
+                                    name="jobOrWorking"
+                                />
+                                <div className={`flex cursor-pointer rounded overflow-hidden  ring ring-transparent transition-all active:scale-95 ${isWorking === "Currently working" ? "bg-secondary ring-primary" : "bg-white ring-secondary"}`}>
+                                    <div className="p-2 h-28 w-24 text-center flex flex-col justify-between items-center gap-0 gap-x-5">
                                         <img src={working} alt="" />
                                         <div className="">
                                             <h2 className="font-semibold text-[#1d5da8] text-xs mt-1">Currently working</h2>
@@ -271,9 +307,11 @@ const Form = () => {
                             htmlFor="collegeName">
                             <h5 className='text-lg'>College Name</h5>
                             <input
+                                {...register("collegeName", { required: true })}
                                 type="text"
                                 id='collegeName'
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
+                                name='collegeName'
                                 required
                             />
                         </label>
@@ -282,12 +320,13 @@ const Form = () => {
                             htmlFor="collegeDegree">
                             <h5 className='text-lg'>Select your latest degree</h5>
                             <select
+                                {...register("collegeDegree", { required: true })}
                                 name="collegeDegree"
                                 id="collegeDegree"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option selected value="grade">Latest degree?</option>
+                                <option hidden>Latest degree?</option>
                                 <option value="bTech">BTech</option>
                                 <option value="bsc">BSC</option>
                                 <option value="msc">MSC</option>
@@ -300,12 +339,13 @@ const Form = () => {
                             htmlFor="graduationYear">
                             <h5 className='text-lg'>Select your graduation year</h5>
                             <select
+                                {...register("graduationYear", { required: true })}
                                 name="graduationYear"
                                 id="graduationYear"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option value="grade">Graduation year?</option>
+                                <option hidden>Graduation year?</option>
                                 <option value="2023">2023</option>
                                 <option value="2022">2022</option>
                                 <option value="2021">2021</option>
@@ -335,9 +375,11 @@ const Form = () => {
                             htmlFor="companyName">
                             <h5 className='text-lg'>Company Name</h5>
                             <input
+                                {...register("companyName", { required: true })}
                                 type="text"
                                 id='companyName'
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
+                                name='companyName'
                                 required
                             />
                         </label>
@@ -346,12 +388,13 @@ const Form = () => {
                             htmlFor="workingExperience">
                             <h5 className='text-lg'>Select your experience</h5>
                             <select
+                                {...register("workingExperience", { required: true })}
                                 name="workingExperience"
                                 id="workingExperience"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option selected>Total experience?</option>
+                                <option hidden>Total experience?</option>
                                 <option value="1year">1year</option>
                                 <option value="2year">2year</option>
                                 <option value="3year">3year</option>
@@ -370,12 +413,13 @@ const Form = () => {
                             htmlFor="jobTitle">
                             <h5 className='text-lg'>Select your job title</h5>
                             <select
+                                {...register("jobTitle", { required: true })}
                                 name="jobTitle"
                                 id="jobTitle"
                                 className='py-0.5 outline outline-secondary focus:outline-4 border-none'
                                 required
                             >
-                                <option selected>Your job title?</option>
+                                <option hidden>Your job title?</option>
                                 <option value="Junior Developer">Junior Developer</option>
                                 <option value="Sr. Developer">Sr. Developer</option>
                                 <option value="Front End Developer">Front End Developer</option>
@@ -399,6 +443,12 @@ const Form = () => {
                     Submit
                 </button>
             </form>
+            {
+                modalOpen && <Modal
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                />
+            }
         </div>
     );
 };

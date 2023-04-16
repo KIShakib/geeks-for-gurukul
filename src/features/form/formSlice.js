@@ -6,7 +6,7 @@ const initialState = {
 
 
 
-export const counterSlice = createSlice({
+export const formSlice = createSlice({
   name: 'formData',
   initialState,
   reducers: {
@@ -17,7 +17,7 @@ export const counterSlice = createSlice({
 
 });
 
-export const { getFormData } = counterSlice.actions;
+export const { getFormData } = formSlice.actions;
 
 
-export default counterSlice.reducer;
+export default formSlice.reducer;
