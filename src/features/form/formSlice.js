@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  formData: {}
+  formData: {},
+  modalOpen: false,
 };
 
 
@@ -13,11 +14,14 @@ export const formSlice = createSlice({
     getFormData: (state, action) => {
       state.formData = action.payload
     },
+    toggleModal: (state, action) => {
+      state.modalOpen = action.payload
+    },
   },
 
 });
 
-export const { getFormData } = formSlice.actions;
+export const { getFormData, toggleModal } = formSlice.actions;
 
 
 export default formSlice.reducer;

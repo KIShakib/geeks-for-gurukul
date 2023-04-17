@@ -5,8 +5,8 @@ import school from "../../../Assets/school.png";
 import college from "../../../Assets/college.png";
 import lookingJob from "../../../Assets/looking-job.png";
 import working from "../../../Assets/working.png";
-import { getFormData } from "../../../features/form/formSlice";
-import { useDispatch } from 'react-redux';
+import { getFormData, toggleModal } from "../../../features/form/formSlice";
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import Modal from '../Modal/Modal';
 
@@ -14,7 +14,9 @@ const Form = () => {
     const [isStudying, setIsStudying] = useState(null);
     const [schoolOrCollege, setSchoolOrCollege] = useState(null);
     const [isWorking, setIsWorking] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
+
+    const { modalOpen } = useSelector((state) => state.form);
 
     const dispatch = useDispatch();
 
@@ -25,12 +27,13 @@ const Form = () => {
     const onSubmit = data => {
         // console.log("From onSubmit");
         dispatch(getFormData(data));
-        setModalOpen(!modalOpen)
+        // setModalOpen(!modalOpen)
+        dispatch(toggleModal(!modalOpen))
     };
 
     return (
         <div className='py-20'>
-            <h3 className='text-center text-2xl font-barlow font-medium text-primary'>Hi Stranger! Welcome back to Geeks for Gurukul</h3>
+            <h3 className='text-center text-2xl font-barlow font-medium text-primary'>Hi Stranger! Welcome back to Intro Yourself</h3>
 
 
             <form className='mt-5' onSubmit={handleSubmit(onSubmit)}>
@@ -224,19 +227,9 @@ const Form = () => {
                             >
                                 <option hidden>Graduation year?</option>
                                 <option value="2023">2023</option>
-                                <option value="2022">2022</option>
-                                <option value="2021">2021</option>
-                                <option value="2020">2020</option>
-                                <option value="2019">2019</option>
-                                <option value="2018">2018</option>
-                                <option value="2017">2017</option>
-                                <option value="2016">2016</option>
-                                <option value="2015">2015</option>
-                                <option value="2014">2014</option>
-                                <option value="2013">2013</option>
-                                <option value="2012">2012</option>
-                                <option value="2011">2011</option>
-                                <option value="2010">2010</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
                             </select>
                         </label>
                     </div>
@@ -445,8 +438,8 @@ const Form = () => {
             </form>
             {
                 modalOpen && <Modal
-                    modalOpen={modalOpen}
-                    setModalOpen={setModalOpen}
+                    // modalOpen={modalOpen}
+                    // setModalOpen={setModalOpen}
                 />
             }
         </div>
